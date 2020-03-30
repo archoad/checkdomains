@@ -1,0 +1,98 @@
+@charset "utf-8";
+
+@font-face {
+	font-family: 'Conso';
+	src: url("conso.woff") format("woff"), url("conso.ttf") format("truetype");
+	font-style: normal;
+	font-stretch: normal;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+html {
+	height: 100%;
+}
+
+body {
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	padding: 0;
+	background-color: #20262e;
+	color: #cfd0d2;
+	font-family: Conso;
+	font-size: 10pt;
+	line-height: 18px;
+}
+
+table {
+	font-size: 10pt;
+}
+
+span {
+	display: table;
+}
+
+.white { color: #cfd0d2; }
+.blue { color: #268de0; }
+.green { color: #68dd8a; }
+.orange { color: #f7af67; }
+.red { color: #e65a63; }
+.violet { color: #b896ed; }
+.brown { color: #465e78; }
+
+.gradient1 { color: #bd1d47; }
+.gradient2 { color: #e65a7f; }
+.gradient3 { color: #ec7c0c; }
+.gradient4 { color: #f7af67; }
+.gradient5 { color: #f7e967; }
+
+.container {
+	display: block;
+	overflow: hidden;
+	padding: 10px;
+}
+
+.flex {
+	display: block;
+	overflow-x: hidden;
+	overflow-y: scroll;
+	padding: 10px;
+	height: 80%;
+}
+
+.ctn-l { float: left; }
+.ctn-r { float: right; }
+.ctn-n { float: none; }
+.ctn-tier { width: 33.33%; }
+.ctn-half { width: 50.00%; }
+.ctn-full{ width: 100.0%; }
+.multi-column { column-count: 3; }
+
+.oneliner {
+	display: inline-block;
+	max-height: 20px;
+	overflow: hidden;
+	float: left;
+	white-space: nowrap;
+}
+
+a {
+	text-decoration: none;
+}
+
+img {
+	background-color: #cfd0d2;
+}
+
+.scroller {
+	scrollbar-color: #20262e #505f73;
+	scrollbar-width: thin;
+}
+
+.fontspan {
+	font-size: 9pt;
+	line-height: 15px;
+}
