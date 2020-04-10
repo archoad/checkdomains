@@ -24,6 +24,47 @@ https://github.com/x0rz/phishing_catcher
 =========================================================*/
 
 
+function traiteString($str) {
+	$str = str_split($str);
+	$temp = '';
+	for($i=0; $i<count($str); $i++) {
+		switch ($str[$i]) {
+			case '+':
+			case '=':
+			case '|':
+				$temp .= ' ';
+				break;
+			default:
+				$temp .= $str[$i];
+				break;
+		}
+	}
+	$temp = str_split($temp);
+	$output = '';
+	for($i=0; $i<count($temp); $i++) {
+		if (isset($temp[$i+1])) {
+			$chrNum = sprintf("%d%d", ord($temp[$i]), ord($temp[$i+1]));
+			switch ($chrNum) {
+				case '4039': // remove ('
+				case '3941': // remove ')
+				case '4041': // remove ()
+				case '4747': // remove //
+					$output .= ' ';
+					$i += 1;
+					break;
+				default:
+					$output .= $temp[$i];
+					break;
+			}
+		} else {
+			$output .= $temp[$i];
+		}
+	}
+	$output = strip_tags($output);
+	return htmlspecialchars($output, ENT_QUOTES, 'UTF-8');
+}
+
+
 function genNonce($length) {
 	$nonce = random_bytes($length);
 	$b64 = base64_encode($nonce);
@@ -115,12 +156,14 @@ function testForm() {
 	printf("</td><td>&nbsp;</td><td>");
 	printf("<input type='text' size='10' maxlength='10' name='captcha' id='captcha' placeholder='Saisir le code' required />");
 	printf("</td><td>&nbsp;</td><td>");
-	printf("<input type='submit' value='Valider' />");
+	printf("<input class='button' type='submit' value='Valider' />");
 	printf("</td><td>&nbsp;</td><td>");
-	printf("<input id='stop' type='button' value='Stopper' />");
-	printf("</td>");
-	printf("</tr></table>");
-	printf("</form></div>");
+	printf("<input id='stop' class='button' type='button' value='Stopper' />");
+	printf("</td><td>&nbsp;</td><td>");
+	printf("<div id='download'></div>");
+	printf("</td></tr></table>");
+	printf("</form>");
+	printf("</div>");
 	printf("<script nonce='%s'>document.getElementById('stop').addEventListener('click', function(){stopStream();});</script>", $_SESSION['nonce']);
 }
 
@@ -137,15 +180,15 @@ function displayResult($post='') {
 	printf("<span class='oneliner brown'>// Analyse en temps réels</span><br />");
 	printf("<table><tr><td>&nbsp;");
 	if (!empty($post['word1'])) {
-		printf("<span class='white' id='txtword1'>%s</span>", $post['word1']);
+		printf("<span class='white' id='txtword1'>%s</span>", traiteString($post['word1']));
 	}
 	printf("</td><td>&nbsp;");
 	if (!empty($post['word2'])) {
-		printf("<span class='white' id='txtword2'>%s</span>", $post['word2']);
+		printf("<span class='white' id='txtword2'>%s</span>", traiteString($post['word2']));
 	}
 	printf("</td><td>&nbsp;");
 	if (!empty($post['word3'])) {
-		printf("<span class='white' id='txtword3'>%s</span>", $post['word3']);
+		printf("<span class='white' id='txtword3'>%s</span>", traiteString($post['word3']));
 	}
 	printf("</td></tr></table>");
 	printf("</div>");

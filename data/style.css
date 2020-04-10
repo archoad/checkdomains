@@ -96,3 +96,18 @@ img {
 	font-size: 9pt;
 	line-height: 15px;
 }
+
+.button {
+	display: inline-block;
+	width: 100px;
+	background: #ffffff;
+	cursor: pointer;
+	padding: 2px 0 2px 0;
+	text-align: center;
+	text-decoration: none;
+	border-radius: 5px;
+	border: none;
+	color: #000000;
+	font-size: 8pt;
+	font-family: 'Conso';
+}

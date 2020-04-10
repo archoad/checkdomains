@@ -236,7 +236,6 @@ function callback(message) {
 	let monitorDiv = document.getElementById('wordmonitoring');
 	if (message.message_type === "certificate_update") {
 		var allDomains = message.data.leaf_cert.all_domains;
-		var d = new Date;
 	}
 	//for test
 	//var allDomains = ['*.net.pаypаl.com.paypol.log-in.com.ga', 'log-in.sign-in.acc-ount.gouv-.com', 'xn--bcher-kva.ch', '*.net.pаypаl.com.paypol.coronna.com.ga', 'covid-test.log.fr', 'coronnа-test-covid.log.fr'];
@@ -251,7 +250,10 @@ function callback(message) {
 		[currScore, monitoredDomain] = computeScore(domain);
 		score += currScore;
 		if (score >= 50) {
-			let msg = counter.toString().padStart(6, '0') + " ["+d.getDate()+"/"+d.getMonth()+"/"+d.getFullYear()+" "+d.getHours()+":"+d.getMinutes()+"] ";
+			let d = new Date();
+			let day =  ('0'+d.getDate()).slice(-2)+"/"+('0'+(d.getMonth()+1)).slice(-2)+"/"+d.getFullYear();
+			let hour = ('0'+d.getHours()).slice(-2)+":"+('0'+d.getMinutes()).slice(-2)+":"+('0'+d.getSeconds()).slice(-2);
+			let msg = counter.toString().padStart(6, '0') + " ["+day+" "+hour+"] ";
 			let elt = document.createElement('span');
 			if (score >= 100) {
 				elt.setAttribute('class', 'fontspan gradient1');
@@ -275,6 +277,7 @@ function callback(message) {
 			analyseDiv.appendChild(elt);
 			analyseDiv.scrollTop = analyseDiv.scrollHeight;
 			if (monitoredDomain) {
+				allTxt += day + ";" + hour + ";" + score + ";" + caAuthority + ";" + domain + "\n";
 				monitorDiv.appendChild(elt);
 				monitorDiv.scrollTop = monitorDiv.scrollHeight;
 			}
@@ -283,10 +286,23 @@ function callback(message) {
 }
 
 
+function download(filename, text) {
+	let downloadDiv = document.getElementById('download');
+	let elt = document.createElement('a');
+	elt.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+	elt.setAttribute('download', filename);
+	elt.setAttribute('class', 'button');
+	elt.appendChild(document.createTextNode('Télécharger'));
+	downloadDiv.appendChild(elt);
+	//elt.click();
+}
+
+
 const certstreamUrl = 'wss://certstream.calidog.io';
 const certstreamSocket = new WebSocket(certstreamUrl);
 var counter = 0;
 var timerID = 0;
+var allTxt = "Date;Heure;Note;caAuthority;Domaine\n";
 
 
 function keepAlive() {
@@ -331,5 +347,8 @@ function stopStream() {
 	certstreamSocket.onclose = function() {
 		cancelKeepAlive();
 	};
+	if (allTxt.length !== 0) {
+		download('results.csv', allTxt);
+	}
 	console.log("Closing connexion");
 }
