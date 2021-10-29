@@ -227,6 +227,9 @@ function testingAuthority(caAuthority) {
 	if (caAuthority.includes("Let's Encrypt")) {
 		score += 10;
 	}
+	if (caAuthority.includes("ZeroSSL")) {
+		score += 10;
+	}
 	return score;
 }
 
